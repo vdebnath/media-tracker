@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="MediaTracker.Api/MediaTracker.Api.csproj" />
+  <Project Path="MediaTracker.Data/MediaTracker.Data.csproj" />
+  <Project Path="MediaTracker.Services/MediaTracker.Services.csproj" />
+</Solution>

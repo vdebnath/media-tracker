@@ -1,0 +1,6 @@
+@MediaTracker.Api_HostAddress = http://localhost:5269
+
+GET {{MediaTracker.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
