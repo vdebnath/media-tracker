@@ -32,9 +32,9 @@ namespace MediaTracker.Services
             return await _mediaItemRepository.UpdateItemAsync(updatedMediaItem);
         }
 
-        public async Task DeleteItemAsync(int id)
+        public async Task<bool> DeleteItemAsync(int id)
         {
-            await _mediaItemRepository.DeleteItemAsync(id);
+            return await _mediaItemRepository.DeleteItemAsync(id);
         }
     }
 }

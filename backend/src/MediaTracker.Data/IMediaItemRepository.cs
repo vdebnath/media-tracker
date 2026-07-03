@@ -8,6 +8,6 @@ namespace MediaTracker.Data
         Task<MediaItem?> GetByIdAsync(int id);
         Task<MediaItem> AddItemAsync(MediaItem mediaItem);
         Task<MediaItem> UpdateItemAsync(MediaItem mediaItem);
-        Task DeleteItemAsync(int id);
+        Task<bool> DeleteItemAsync(int id);
     }
 }

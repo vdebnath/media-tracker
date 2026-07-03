@@ -48,7 +48,7 @@ namespace MediaTracker.Data
             return updatedMediaItem;
         }
 
-        public async Task DeleteItemAsync(int id)
+        public async Task<bool> DeleteItemAsync(int id)
         {
             MediaItem? itemToDelete = await _mediaTrackerDbContext.MediaItems.FindAsync(id);
 
@@ -56,7 +56,11 @@ namespace MediaTracker.Data
             {
                 _mediaTrackerDbContext.MediaItems.Remove(itemToDelete);
                 await _mediaTrackerDbContext.SaveChangesAsync();
+
+                return true;
             }
+
+            return false;
         }
     }
 }
