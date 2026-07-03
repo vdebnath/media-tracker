@@ -1,5 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using MediaTracker.Data;
+using MediaTracker.Services;
 
 //Add services to container
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +11,9 @@ builder.Services.RegisterDataDependencies(builder.Configuration, builder.Environ
 
 //OpenAPI 
 builder.Services.AddOpenApi();
+
+//Register Services for Business Logic
+builder.Services.RegisterServiceDependencies();
 
 var app = builder.Build();
 

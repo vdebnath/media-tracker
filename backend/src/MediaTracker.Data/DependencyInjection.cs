@@ -15,7 +15,7 @@ namespace MediaTracker.Data
 
         private static void RegisterRepositories(this IServiceCollection services)
         {
-        services.AddScoped<IMediaItemRepository, MediaItemRepository>(); 
+            services.AddScoped<IMediaItemRepository, MediaItemRepository>(); 
         }
 
         private static void RegisterEfContext(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
