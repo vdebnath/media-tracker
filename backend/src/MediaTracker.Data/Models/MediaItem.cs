@@ -1,5 +1,8 @@
 namespace MediaTracker.Data.Models
 {
+    /// <summary>
+    /// Different media types
+    /// </summary>
     public enum MediaType
     {
         Show,
@@ -7,6 +10,9 @@ namespace MediaTracker.Data.Models
         Book
     }
 
+    /// <summary>
+    /// Correlates to status in UI
+    /// </summary>
     public enum MediaStatus
     {
         Backlog,
@@ -14,6 +20,9 @@ namespace MediaTracker.Data.Models
         Completed
     }
 
+    /// <summary>
+    /// Media Item definition
+    /// </summary>
     public class MediaItem
     {
         public int Id {get; set;}

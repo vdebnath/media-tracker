@@ -3,9 +3,18 @@ using MediaTracker.Data.Models;
 
 namespace MediaTracker.Data
 {
+    /// <summary>
+    /// Implementation of IMediaItemRepository interface
+    /// Defines all EF core logic for all CRUD operations 
+    /// </summary>
     public class MediaItemRepository : IMediaItemRepository
     {
         private readonly MediaTrackerDbContext _mediaTrackerDbContext;
+
+        /// <summary>
+        /// Accepts the dbContext via injection
+        /// </summary>
+        /// <param name="dbContext">DbContext being used</param>
         public MediaItemRepository(MediaTrackerDbContext dbContext)
         {
             _mediaTrackerDbContext = dbContext;
@@ -16,7 +25,7 @@ namespace MediaTracker.Data
             List<MediaItem> mediaItemsList = await _mediaTrackerDbContext.MediaItems.AsNoTracking().ToListAsync();
             return mediaItemsList;
         }
-
+        
         public async Task<MediaItem?> GetByIdAsync(int id)
         {
             MediaItem? mediaItem = await _mediaTrackerDbContext.MediaItems
@@ -25,7 +34,7 @@ namespace MediaTracker.Data
 
             return mediaItem;
         }
-
+        
         public async Task<MediaItem> AddItemAsync(MediaItem mediaItem)
         {
             await _mediaTrackerDbContext.AddAsync(mediaItem);
@@ -34,18 +43,20 @@ namespace MediaTracker.Data
             return mediaItem;
         }
 
-        public async Task<MediaItem> UpdateItemAsync(MediaItem updatedMediaItem)
+        public async Task<bool> UpdateItemAsync(MediaItem updatedMediaItem)
         {
             MediaItem? existingMediaItem = await _mediaTrackerDbContext.MediaItems
                 .FirstOrDefaultAsync(item => item.Id == updatedMediaItem.Id);
                 
-            if (existingMediaItem is not null)
+            if (existingMediaItem is null)
             {
-                _mediaTrackerDbContext.Entry(existingMediaItem).CurrentValues.SetValues(updatedMediaItem);
-                await _mediaTrackerDbContext.SaveChangesAsync();
+                return false;
             }
 
-            return updatedMediaItem;
+            _mediaTrackerDbContext.Entry(existingMediaItem).CurrentValues.SetValues(updatedMediaItem);
+            await _mediaTrackerDbContext.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> DeleteItemAsync(int id)

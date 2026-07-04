@@ -27,7 +27,7 @@ namespace MediaTracker.Services
             return await _mediaItemRepository.AddItemAsync(mediaItem);
         }
 
-        public async Task<MediaItem> UpdateItemAsync(MediaItem updatedMediaItem)
+        public async Task<bool> UpdateItemAsync(MediaItem updatedMediaItem)
         {
             return await _mediaItemRepository.UpdateItemAsync(updatedMediaItem);
         }

@@ -68,9 +68,12 @@ namespace MediaTracker.Api
         /// Edits a single media item 
         /// </summary>
         /// <param name="id">ID of media item to edit</param>
-        /// <param name="mediaItem">The details of the media item to be eddited</param>
-        /// <returns>200 ok with updated media item</returns>
-        /// <remarks>Return 401 if the input id does not match the media item</remarks>
+        /// <param name="mediaItem">The details of the media item edited</param>
+        /// <returns>204 No Content indicating success</returns>
+        /// <remarks>
+        /// Return 400 Bad Request if the route ID does not match the body's media item
+        /// Return 404 Not Found if no media item matches ID 
+        /// </remarks>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMediaItem(int id, MediaItem mediaItem)
         {
@@ -79,16 +82,21 @@ namespace MediaTracker.Api
                 return BadRequest("Route Id does not match media item id.");
             }
             
-            var updatedMediaItem = await _mediaItemService.UpdateItemAsync(mediaItem);
+            bool gotUpdated = await _mediaItemService.UpdateItemAsync(mediaItem);
 
-            return Ok(updatedMediaItem);
+            if (!gotUpdated)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
 
         /// <summary>
         /// Removes a single media item from DB
         /// </summary>
         /// <param name="id">ID of media item to be removed</param>
-        /// <returns>204 No Content if successfull</returns>
+        /// <returns>204 No Content if successful</returns>
         /// <remarks>Returns 404 Not Found if input ID does not match any existing records</remarks>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMediaItem(int id)
