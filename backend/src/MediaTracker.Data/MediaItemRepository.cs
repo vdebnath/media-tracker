@@ -48,11 +48,6 @@ namespace MediaTracker.Data
             MediaItem? existingMediaItem = await _mediaTrackerDbContext.MediaItems
                 .FirstOrDefaultAsync(item => item.Id == updatedMediaItem.Id);
                 
-            if (existingMediaItem is null)
-            {
-                return false;
-            }
-
             _mediaTrackerDbContext.Entry(existingMediaItem).CurrentValues.SetValues(updatedMediaItem);
             await _mediaTrackerDbContext.SaveChangesAsync();
 
@@ -62,16 +57,10 @@ namespace MediaTracker.Data
         public async Task<bool> DeleteItemAsync(int id)
         {
             MediaItem? itemToDelete = await _mediaTrackerDbContext.MediaItems.FindAsync(id);
+            _mediaTrackerDbContext.MediaItems.Remove(itemToDelete);
+            await _mediaTrackerDbContext.SaveChangesAsync();
 
-            if (itemToDelete is not null)
-            {
-                _mediaTrackerDbContext.MediaItems.Remove(itemToDelete);
-                await _mediaTrackerDbContext.SaveChangesAsync();
-
-                return true;
-            }
-
-            return false;
+            return true;
         }
     }
 }

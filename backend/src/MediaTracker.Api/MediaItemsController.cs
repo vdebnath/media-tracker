@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using MediaTracker.Services;
-using MediaTracker.Data.Models;
+using MediaTracker.Services.Results;
+using MediaTracker.Services.Enums;
+using MediaTracker.Services.DTO;
 
 namespace MediaTracker.Api
 {
@@ -29,8 +31,8 @@ namespace MediaTracker.Api
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var mediaItems = await _mediaItemService.GetAllAsync();
-            return Ok(mediaItems);
+            Result<List<MediaItemDTO>> mediaItemDTOs = await _mediaItemService.GetAllAsync();
+            return Ok(mediaItemDTOs.Data);
         }
 
         /// <summary>
@@ -42,14 +44,14 @@ namespace MediaTracker.Api
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMediaItem(int id)
         {
-            var mediaItem = await _mediaItemService.GetByIdAsync(id);
+            Result<MediaItemDTO?> mediaItemDTO = await _mediaItemService.GetByIdAsync(id);
 
-            if (mediaItem == null)
+            if (mediaItemDTO.Data == null)
             {
                 return NotFound();
             }
 
-            return Ok(mediaItem);
+            return Ok(mediaItemDTO.Data);
         }
 
         /// <summary>
@@ -58,10 +60,16 @@ namespace MediaTracker.Api
         /// <param name="mediaItem">New media item to add</param>
         /// <returns>201 created with media item that got added</returns>
         [HttpPost]
-        public async Task<IActionResult> AddMediaItem(MediaItem mediaItem)
+        public async Task<IActionResult> AddMediaItem(MediaItemDTO mediaItemDTO)
         {
-            var addedMediaItem = await _mediaItemService.AddItemAsync(mediaItem);
-            return CreatedAtAction(nameof(GetMediaItem), new {id = addedMediaItem.Id}, addedMediaItem);
+            Result<MediaItemDTO> addedMediaItemDTO = await _mediaItemService.AddItemAsync(mediaItemDTO);
+
+            if (addedMediaItemDTO.Status == MediaItemResultStatus.ValidationFailed)
+            {
+                return BadRequest(addedMediaItemDTO.Message);
+            }
+
+            return CreatedAtAction(nameof(GetMediaItem), new {id = addedMediaItemDTO.Data.Id}, addedMediaItemDTO.Data);
         }
 
         /// <summary>
@@ -75,18 +83,26 @@ namespace MediaTracker.Api
         /// Return 404 Not Found if no media item matches ID 
         /// </remarks>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateMediaItem(int id, MediaItem mediaItem)
+        public async Task<IActionResult> UpdateMediaItem(int id, MediaItemDTO mediaItemDTO)
         {
-            if (id != mediaItem.Id)
+            if (id != mediaItemDTO.Id)
             {
                 return BadRequest("Route Id does not match media item id.");
             }
             
-            bool gotUpdated = await _mediaItemService.UpdateItemAsync(mediaItem);
+            Result<bool> result = await _mediaItemService.UpdateItemAsync(mediaItemDTO);
 
-            if (!gotUpdated)
+            if (result.Data == false)
             {
-                return NotFound();
+                if (result.Status == MediaItemResultStatus.ValidationFailed)
+                {
+                    return BadRequest(result.Message);
+                }
+
+                if (result.Status == MediaItemResultStatus.NotFound)
+                {
+                    return NotFound(result.Message);
+                }
             }
 
             return NoContent();
@@ -101,11 +117,11 @@ namespace MediaTracker.Api
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMediaItem(int id)
         {
-            bool gotDeleted = await _mediaItemService.DeleteItemAsync(id);
+            Result<bool> result = await _mediaItemService.DeleteItemAsync(id);
 
-            if (!gotDeleted)
+            if (result.Data == false)
             {
-                return NotFound();
+                return NotFound(result.Message);
             }
 
             return NoContent();
