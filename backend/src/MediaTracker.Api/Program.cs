@@ -9,8 +9,8 @@ builder.Services.AddControllers();
 //Register SQLLite connection
 builder.Services.RegisterDataDependencies(builder.Configuration, builder.Environment);
 
-//OpenAPI 
-builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerUI();
 
 //Register Services for Business Logic
 builder.Services.RegisterServiceDependencies();
@@ -31,7 +31,8 @@ var app = builder.Build();
 //Configure HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseAuthorization();

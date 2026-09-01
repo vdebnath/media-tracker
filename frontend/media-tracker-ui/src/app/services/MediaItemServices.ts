@@ -1,7 +1,11 @@
+import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { MediaItem } from "../models/MediaItem";
 
+@Injectable({
+    providedIn: 'root'
+})
 export class MediaItemService {
     private actionUrl: string = 'http://localhost:5269/api/mediaitems';
     public readonly version: string = '1.0';
@@ -13,7 +17,7 @@ export class MediaItemService {
     }
 
     public getMediaItem(id: number): Observable<MediaItem> {
-        return this.http.get<MediaItem>(`${this.actionUrl}/${id}`)
+        return this.http.get<MediaItem>(`${this.actionUrl}/${id}`);
     }
 
     public addMediaItem(mediaItem: MediaItem): Observable<MediaItem> {

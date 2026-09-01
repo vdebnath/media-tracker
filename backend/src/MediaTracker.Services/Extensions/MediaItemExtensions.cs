@@ -27,8 +27,8 @@ namespace MediaTracker.Services.Extensions
                 Id = dto.Id,
                 Title = dto.Title,
                 Type = ParseMediaType(dto.Type),
-                Status = ParseStatusType(dto.Status)
-
+                Status = ParseStatusType(dto.Status),
+                Notes = dto.Notes
             };
 
             return mediaItem;

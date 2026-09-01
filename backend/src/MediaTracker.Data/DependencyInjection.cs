@@ -1,3 +1,4 @@
+using MediaTracker.Data.Security;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,7 @@ namespace MediaTracker.Data
         private static void RegisterRepositories(this IServiceCollection services)
         {
             services.AddScoped<IMediaItemRepository, MediaItemRepository>(); 
+            services.AddScoped<IMediaItemSecurityAuth, MediaItemSecurityAuth>();
         }
 
         private static void RegisterEfContext(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
