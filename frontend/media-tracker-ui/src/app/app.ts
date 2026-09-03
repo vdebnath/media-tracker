@@ -1,13 +1,13 @@
-import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [RouterOutlet],
-  templateUrl: './app.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './app.scss',
+  template: `<router-outlet></router-outlet>`,
+  styleUrl: './app.scss'
 })
-export class App {
-  protected readonly title = signal('media-tracker-ui');
+export class AppComponent {
+  title = 'media-tracker-ui';
 }

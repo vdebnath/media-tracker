@@ -1,0 +1,21 @@
+<nav class="nav">
+    <div class="nav-title">Media Tracker</div>
+
+    <ul class="nav-links">
+        <li>
+            <a  routerLink="/items"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}"
+            >
+                Media Items
+            </a>
+        </li>
+        <li>
+            <a  routerLink="/blank" 
+                routerLinkActive="active" 
+                [routerLinkActiveOptions]="{ exact: true }">
+                Blank Test
+            </a>
+        </li>
+    </ul>
+</nav>
